@@ -3,7 +3,7 @@
     i: .word -1
     ii: .word -1
     max: .word 8
-    base: .word 4#dispalcement are times of 4
+    newline: .asciiz "\n"
 
 .text
 
@@ -34,10 +34,13 @@ main:
 
     lw $s1, i
     lw $s5, max
+
+    li $t4, -4
+    li $s4, 36
  
 outer:
     addi $s1, $s1, 1
-    bgt $s1, $s5, exit#if (i>8)exit else enter inner loop
+    bgt $s1, $s5, output#if (i>8)exit else enter inner loop
 
     lw $s2, ii#s2<-- ii
     li $t7, -4#store dispalcement
@@ -63,6 +66,19 @@ inner:
     sw $t0, 4($t5)#arr[ii+1]<--$t0=arr[ii]
 
     b inner
+
+output:
+    addi $t4, $t4, 4			# $t4<--$t4+4
+    bgt $t4, $s4, exit#if($t4>36) exit
+    add $t2, $s6, $t4#$t2<-- $s6+$t4
+    lw $t3, 0($t2)#read arr[i]
+    move $a0, $t3
+    li $v0, 1
+    syscall
+    la $a0, newline
+    li $v0, 4
+    syscall
+    b output
 
 exit:
     li $v0,10
