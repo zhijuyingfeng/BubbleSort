@@ -29,3 +29,5 @@ main:
     sw $t1, 32($s6)
     addi $t1, $zero, 7
     sw $t1, 36($s6)
+
+    #test
