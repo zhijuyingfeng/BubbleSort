@@ -34,20 +34,20 @@ main:
 
     lw $s1, i
     lw $s5, max
-
-
-.outer:
+ 
+outer:
     addi $s1, $s1, 1
     bgt $s1, $s5, exit#if (i>8)exit else enter inner loop
 
     lw $s2, ii#s2<-- ii
     li $t7, -4#store dispalcement
 
-    addi $t7, $t7, 4#the value $t7 adds 4
-    addi $s2, $s2, 1#the value ii($s2) adds 1
 
     #inner loop
-.inner:
+inner:
+    addi $t7, $t7, 4#the value $t7 adds 4
+    addi $s2, $s2, 1#the value ii($s2) adds 1
+    
     sub $s3, $s5, $s1#$s3<--$s5-$s1=8-i
     bgt $s2, $s3, outer#if(ii>8-i)end inner loop
 
@@ -62,5 +62,8 @@ main:
     sw $t1, ($t5)#arr[ii]<--$t1=arr[ii+1]
     sw $t0, 4($t5)#arr[ii+1]<--$t0=arr[ii]
 
-.exit:
+    b inner
+
+exit:
+    li $v0,10
     syscall
