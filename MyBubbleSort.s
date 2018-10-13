@@ -1,7 +1,9 @@
 .data 
     arr: .space 40
-    i: .word 0
-    ii: .word 9
+    i: .word -1
+    ii: .word -1
+    max: .word 8
+    base: .word 4#dispalcement are times of 4
 
 .text
 
@@ -30,4 +32,35 @@ main:
     addi $t1, $zero, 7
     sw $t1, 36($s6)
 
-    #test
+    lw $s1, i
+    lw $s5, max
+
+
+.outer:
+    addi $s1, $s1, 1
+    bgt $s1, $s5, exit#if (i>8)exit else enter inner loop
+
+    lw $s2, ii#s2<-- ii
+    li $t7, -4#store dispalcement
+
+    addi $t7, $t7, 4#the value $t7 adds 4
+    addi $s2, $s2, 1#the value ii($s2) adds 1
+
+    #inner loop
+.inner:
+    sub $s3, $s5, $s1#$s3<--$s5-$s1=8-i
+    bgt $s2, $s3, outer#if(ii>8-i)end inner loop
+
+    add $t5, $s6, $t7
+    lw $t0, ($t5)#$t0<--arr[ii]
+    lw $t1, 4($t5)#<-- arr[ii+1]
+    
+    #if(arr[ii+1]>arr[ii] back to inner loop
+    bgt $t1, $t0, inner
+
+    #swap arr[ii] and arr[ii+1]
+    sw $t1, ($t5)#arr[ii]<--$t1=arr[ii+1]
+    sw $t0, 4($t5)#arr[ii+1]<--$t0=arr[ii]
+
+.exit:
+    syscall
