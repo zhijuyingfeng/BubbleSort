@@ -1,8 +1,6 @@
 .data
     A: .word 83, 32, 37, 70, 98, 53, 38, 18, 98, 14, 32, 92, 14, 74, 61, 62, 99, 83, 39, 95
     B: .word 98, 3, 78, 75, 31, 91, 62, 67, 99, 76, 79, 43, 31, 23, 47, 14, 32, 56, 77, 26, 37, 21, 77, 24, 37, 32, 88, 4, 18, 64
-    # A: .word 2, 4
-    # B: .word 6, 4
     S: .space 80#store the same elements
     newline: .asciiz "\n"
     NoSame: .asciiz "No Same!"
@@ -118,6 +116,7 @@ no_same:
 same:
     addi $s7, $s7, 4
     addi $t0, $t0, 1
+    add $t1, $a0, $zero
     b output_loop
 
 output:
@@ -130,7 +129,7 @@ output:
 
 output_loop:
     bgt $t0, $t2, exit#if(i>k-1) exit
-    lw $a0, 0($s7)
+    lw $a0, 0($s7)#load S[i]
     beq $a0, $t1, same#if(temp==S[i]) don't output
     li $v0, 1
     syscall
